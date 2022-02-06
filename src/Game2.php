@@ -10,6 +10,12 @@ class Game2
 
     public function roll(array $round): void
     {
+        foreach ($round as $key => $value) {
+            if ('X' === $value) {
+                $round[$key] = 10;
+            }
+        }
+
         $this->rounds[] = $round;
     }
 
@@ -24,9 +30,11 @@ class Game2
             foreach ($round as $score) {
                 $roundScore += $score;
                 foreach ($multipliers as $key => $value) {
-                    if (0 !== $value) {
-                        $multipliers[$key]--;
-                        $totalScore += $score;
+                    $multipliers[$key]--;
+                    $totalScore += $score;
+
+                    if (0 === $multipliers[$key]) {
+                        unset($multipliers[$key]);
                     }
                 }
                 $totalScore += $score;

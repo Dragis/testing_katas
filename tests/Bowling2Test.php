@@ -75,12 +75,20 @@ class Bowling2Test extends TestCase
         $this->assertSame($result, $this->game->getScore());
     }
 
+    /** @test */
+    public function should_count_x_as_strike(): void
+    {
+        $this->game->roll(['X']);
+        $this->game->roll([4, 2]);
+
+        $this->assertSame(22, $this->game->getScore());
+    }
 
     public function getGames(): array
     {
         return [
             'perfect game' => [
-                'rounds' => [[10], [10], [10], [10], [10], [10], [10], [10], [10], [10], [10], [10]],
+                'rounds' => [[10], [10], [10], [10], [10], [10], [10], [10], [10], [10, 10, 10]],
                 'result' => 300
             ],
             '133' => [
