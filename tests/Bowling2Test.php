@@ -84,6 +84,25 @@ class Bowling2Test extends TestCase
         $this->assertSame(22, $this->game->getScore());
     }
 
+    /** @test */
+    public function should_get_perfect_score_when_rolling_x(): void
+    {
+        $this->game->roll(['X']);
+        $this->game->roll(['X']);
+        $this->game->roll(['X']);
+        $this->game->roll(['X']);
+        $this->game->roll(['X']);
+        $this->game->roll(['X']);
+        $this->game->roll(['X']);
+        $this->game->roll(['X']);
+        $this->game->roll(['X']);
+        $this->game->roll(['X']);
+        $this->game->roll(['X']);
+        $this->game->roll(['X']);
+
+        $this->assertSame(300, $this->game->getScore());
+    }
+
     public function getGames(): array
     {
         return [
