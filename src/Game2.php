@@ -6,13 +6,16 @@ namespace App;
 
 class Game2
 {
+    const STRIKE_MULTIPLIER = 2;
+    const SPARE_MULTIPLIER = 1;
+    const STRIKE = 'X';
+    const MISS = '-';
+    const SPARE = '/';
     private array $rounds = [];
 
     public function roll(array $round): void
     {
-
         $round = $this->parseScoreFromLetters($round);
-
         $this->rounds[] = $round;
     }
 
@@ -50,15 +53,15 @@ class Game2
         $roundScore = 0;
         foreach ($round as $key => $value) {
             $round[$key] = (int) $value;
-            if ('X' === $value) {
+            if (self::STRIKE === $value) {
                 $round[$key] = 10;
             }
 
-            if ('-' === $value) {
+            if (self::MISS === $value) {
                 $round[$key] = 0;
             }
 
-            if ('/' === $value) {
+            if (self::SPARE === $value) {
                 $round[$key] = 10 - $roundScore;
             }
 
@@ -85,9 +88,9 @@ class Game2
     {
         if (9 > $roundNr) {
             if (10 === $score) {
-                $multipliers[] = 2;
+                $multipliers[] = self::STRIKE_MULTIPLIER;
             } elseif (10 === $roundScore) {
-                $multipliers[] = 1;
+                $multipliers[] = self::SPARE_MULTIPLIER;
             }
         }
 
