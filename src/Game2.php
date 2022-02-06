@@ -67,6 +67,10 @@ class Game2
             }
 
             if ('-' === $value) {
+                $round[$key] = 0;
+            }
+
+            if ('/' === $value) {
                 $round[$key] = 10 - $roundScore;
             }
 

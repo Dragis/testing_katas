@@ -104,12 +104,21 @@ class Bowling2Test extends TestCase
     }
 
     /** @test */
-    public function should_count_minus_as_spare(): void
+    public function should_count_slash_as_spare(): void
+    {
+        $this->game->roll([1, '/']);
+        $this->game->roll([4, 2]);
+
+        $this->assertSame(20, $this->game->getScore());
+    }
+
+    /** @test */
+    public function should_count_minus_as_miss(): void
     {
         $this->game->roll([1, '-']);
         $this->game->roll([4, 2]);
 
-        $this->assertSame(20, $this->game->getScore());
+        $this->assertSame(7, $this->game->getScore());
     }
 
     /**
@@ -127,7 +136,7 @@ class Bowling2Test extends TestCase
     {
         return [
             ['X X X X X X X X X X X X', 300],
-            ['9- 9- 9- 9- 9- 9- 9- 9- 9- 9-9', 190]
+            ['9/ 9/ 9/ 9/ 9/ 9/ 9/ 9/ 9/ 9/9', 190]
         ];
     }
 
