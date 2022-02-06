@@ -36,12 +36,12 @@ class Game2
         foreach ($this->rounds as $roundNr => $round) {
             $roundScore = 0;
 
-            foreach ($round as $score) {
+            foreach ($round as $rollNr => $score) {
                 $roundScore += $score;
                 [$totalScore, $multipliers] = $this->multiplyScore($multipliers, $score, $totalScore);
                 $totalScore += $score;
 
-                $multipliers = $this->setMultipliers($roundNr, $score, $multipliers, $roundScore);
+                $multipliers = $this->setMultipliers($roundNr, $score, $multipliers, $roundScore, $rollNr);
             }
         }
 
@@ -84,10 +84,10 @@ class Game2
         return [$totalScore, $multipliers];
     }
 
-    protected function setMultipliers(int $roundNr, int $score, array $multipliers, int $roundScore): array
+    protected function setMultipliers(int $roundNr, int $score, array $multipliers, int $roundScore, int $rollNr): array
     {
         if (9 > $roundNr) {
-            if (10 === $score) {
+            if (10 === $score && 0 === $rollNr) {
                 $multipliers[] = self::STRIKE_MULTIPLIER;
             } elseif (10 === $roundScore) {
                 $multipliers[] = self::SPARE_MULTIPLIER;
