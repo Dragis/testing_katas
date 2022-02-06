@@ -35,23 +35,10 @@ class Game2
 
             foreach ($round as $score) {
                 $roundScore += $score;
-                foreach ($multipliers as $key => $value) {
-                    $multipliers[$key]--;
-                    $totalScore += $score;
-
-                    if (0 === $multipliers[$key]) {
-                        unset($multipliers[$key]);
-                    }
-                }
+                [$totalScore, $multipliers] = $this->multiplyScore($multipliers, $score, $totalScore);
                 $totalScore += $score;
 
-                if (9 > $roundNr) {
-                    if (10 === $score) {
-                        $multipliers[] = 2;
-                    } elseif (10 === $roundScore) {
-                        $multipliers[] = 1;
-                    }
-                }
+                $multipliers = $this->setMultipliers($roundNr, $score, $multipliers, $roundScore);
             }
         }
 
@@ -62,6 +49,7 @@ class Game2
     {
         $roundScore = 0;
         foreach ($round as $key => $value) {
+            $round[$key] = (int) $value;
             if ('X' === $value) {
                 $round[$key] = 10;
             }
@@ -76,6 +64,33 @@ class Game2
 
             $roundScore += $round[$key];
         }
+
         return $round;
+    }
+
+    protected function multiplyScore(array $multipliers, int $score, int $totalScore): array
+    {
+        foreach ($multipliers as $key => $value) {
+            $multipliers[$key]--;
+            $totalScore += $score;
+
+            if (0 === $multipliers[$key]) {
+                unset($multipliers[$key]);
+            }
+        }
+        return [$totalScore, $multipliers];
+    }
+
+    protected function setMultipliers(int $roundNr, int $score, array $multipliers, int $roundScore): array
+    {
+        if (9 > $roundNr) {
+            if (10 === $score) {
+                $multipliers[] = 2;
+            } elseif (10 === $roundScore) {
+                $multipliers[] = 1;
+            }
+        }
+
+        return $multipliers;
     }
 }
