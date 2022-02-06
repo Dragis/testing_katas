@@ -16,6 +16,15 @@ class Game2
         $this->rounds[] = $round;
     }
 
+    public function setGame(string $game): void
+    {
+        $rounds = explode(' ', $game);
+        foreach ($rounds as $round) {
+            $round = $this->parseScoreFromLetters(str_split($round));
+            $this->rounds[] = $round;
+        }
+    }
+
     public function getScore(): int
     {
         $totalScore = 0;

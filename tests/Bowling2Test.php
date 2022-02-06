@@ -112,6 +112,25 @@ class Bowling2Test extends TestCase
         $this->assertSame(20, $this->game->getScore());
     }
 
+    /**
+     * @test
+     * @dataProvider getGameString
+     */
+    public function should_take_whole_game_as_input(string $game, int $score): void
+    {
+        $this->game->setGame($game);
+
+        $this->assertSame($score, $this->game->getScore());
+    }
+
+    public function getGameString()
+    {
+        return [
+            ['X X X X X X X X X X X X', 300],
+            ['9- 9- 9- 9- 9- 9- 9- 9- 9- 9-9', 190]
+        ];
+    }
+
     public function getGames(): array
     {
         return [
