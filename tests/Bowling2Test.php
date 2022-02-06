@@ -103,6 +103,15 @@ class Bowling2Test extends TestCase
         $this->assertSame(300, $this->game->getScore());
     }
 
+    /** @test */
+    public function should_count_minus_as_spare(): void
+    {
+        $this->game->roll([1, '-']);
+        $this->game->roll([4, 2]);
+
+        $this->assertSame(20, $this->game->getScore());
+    }
+
     public function getGames(): array
     {
         return [

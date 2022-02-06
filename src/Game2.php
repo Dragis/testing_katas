@@ -10,11 +10,8 @@ class Game2
 
     public function roll(array $round): void
     {
-        foreach ($round as $key => $value) {
-            if ('X' === $value) {
-                $round[$key] = 10;
-            }
-        }
+
+        $round = $this->parseScoreFromLetters($round);
 
         $this->rounds[] = $round;
     }
@@ -50,5 +47,22 @@ class Game2
         }
 
         return $totalScore;
+    }
+
+    protected function parseScoreFromLetters(array $round): array
+    {
+        $roundScore = 0;
+        foreach ($round as $key => $value) {
+            if ('X' === $value) {
+                $round[$key] = 10;
+            }
+
+            if ('-' === $value) {
+                $round[$key] = 10 - $roundScore;
+            }
+
+            $roundScore += $round[$key];
+        }
+        return $round;
     }
 }
