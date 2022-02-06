@@ -132,11 +132,13 @@ class Bowling2Test extends TestCase
         $this->assertSame($score, $this->game->getScore());
     }
 
-    public function getGameString()
+    public function getGameString(): array
     {
         return [
             ['X X X X X X X X X X X X', 300],
-            ['9/ 9/ 9/ 9/ 9/ 9/ 9/ 9/ 9/ 9/9', 190]
+            ['9/ 9/ 9/ 9/ 9/ 9/ 9/ 9/ 9/ 9/9', 190],
+            ['9- 9- 9- 9- 9- 9- 9- 9- 9- 9-', 90],
+            ['5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/5', 150],
         ];
     }
 
