@@ -12,6 +12,7 @@ class Game2
     const MISS = '-';
     const SPARE = '/';
     private array $rounds = [];
+    private array $multipliers = [];
 
     public function roll(array $round): void
     {
@@ -31,17 +32,16 @@ class Game2
     public function getScore(): int
     {
         $totalScore = 0;
-        $multipliers = [];
 
         foreach ($this->rounds as $roundNr => $round) {
             $roundScore = 0;
 
             foreach ($round as $rollNr => $score) {
                 $roundScore += $score;
-                [$totalScore, $multipliers] = $this->multiplyScore($multipliers, $score, $totalScore);
+                $totalScore = $this->multiplyScore($score, $totalScore);
                 $totalScore += $score;
 
-                $multipliers = $this->setMultipliers($roundNr, $score, $multipliers, $roundScore, $rollNr);
+                $this->setMultipliers($roundNr, $score, $roundScore, $rollNr);
             }
         }
 
@@ -71,29 +71,28 @@ class Game2
         return $round;
     }
 
-    protected function multiplyScore(array $multipliers, int $score, int $totalScore): array
+    protected function multiplyScore(int $score, int $totalScore): int
     {
-        foreach ($multipliers as $key => $value) {
-            $multipliers[$key]--;
+        foreach ($this->multipliers as $key => $value) {
+            $this->multipliers[$key]--;
             $totalScore += $score;
 
-            if (0 === $multipliers[$key]) {
-                unset($multipliers[$key]);
+            if (0 === $this->multipliers[$key]) {
+                unset($this->multipliers[$key]);
             }
         }
-        return [$totalScore, $multipliers];
+
+        return $totalScore;
     }
 
-    protected function setMultipliers(int $roundNr, int $score, array $multipliers, int $roundScore, int $rollNr): array
+    protected function setMultipliers(int $roundNr, int $score, int $roundScore, int $rollNr): void
     {
         if (9 > $roundNr) {
             if (10 === $score && 0 === $rollNr) {
-                $multipliers[] = self::STRIKE_MULTIPLIER;
+                $this->multipliers[] = self::STRIKE_MULTIPLIER;
             } elseif (10 === $roundScore) {
-                $multipliers[] = self::SPARE_MULTIPLIER;
+                $this->multipliers[] = self::SPARE_MULTIPLIER;
             }
         }
-
-        return $multipliers;
     }
 }
