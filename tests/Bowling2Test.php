@@ -75,12 +75,80 @@ class Bowling2Test extends TestCase
         $this->assertSame($result, $this->game->getScore());
     }
 
+    /** @test */
+    public function should_count_x_as_strike(): void
+    {
+        $this->game->roll(['X']);
+        $this->game->roll([4, 2]);
+
+        $this->assertSame(22, $this->game->getScore());
+    }
+
+    /** @test */
+    public function should_get_perfect_score_when_rolling_x(): void
+    {
+        $this->game->roll(['X']);
+        $this->game->roll(['X']);
+        $this->game->roll(['X']);
+        $this->game->roll(['X']);
+        $this->game->roll(['X']);
+        $this->game->roll(['X']);
+        $this->game->roll(['X']);
+        $this->game->roll(['X']);
+        $this->game->roll(['X']);
+        $this->game->roll(['X']);
+        $this->game->roll(['X']);
+        $this->game->roll(['X']);
+
+        $this->assertSame(300, $this->game->getScore());
+    }
+
+    /** @test */
+    public function should_count_slash_as_spare(): void
+    {
+        $this->game->roll([1, '/']);
+        $this->game->roll([4, 2]);
+
+        $this->assertSame(20, $this->game->getScore());
+    }
+
+    /** @test */
+    public function should_count_minus_as_miss(): void
+    {
+        $this->game->roll([1, '-']);
+        $this->game->roll([4, 2]);
+
+        $this->assertSame(7, $this->game->getScore());
+    }
+
+    /**
+     * @test
+     * @dataProvider getGameString
+     */
+    public function should_take_whole_game_as_input(string $game, int $score): void
+    {
+        $this->game->setGame($game);
+
+        $this->assertSame($score, $this->game->getScore());
+    }
+
+    public function getGameString(): array
+    {
+        return [
+            ['X X X X X X X X X X X X', 300],
+            ['9/ 9/ 9/ 9/ 9/ 9/ 9/ 9/ 9/ 9/9', 190],
+            ['9- 9- 9- 9- 9- 9- 9- 9- 9- 9-', 90],
+            ['5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/5', 150],
+            ['62 72 34 8/ 9- X X X 63 8/7', 153],
+            ['5/ 45 8/ X -/ X 62 X 4/ XX-', 169],
+        ];
+    }
 
     public function getGames(): array
     {
         return [
             'perfect game' => [
-                'rounds' => [[10], [10], [10], [10], [10], [10], [10], [10], [10], [10], [10], [10]],
+                'rounds' => [[10], [10], [10], [10], [10], [10], [10], [10], [10], [10, 10, 10]],
                 'result' => 300
             ],
             '133' => [
