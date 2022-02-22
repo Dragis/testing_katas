@@ -3,6 +3,7 @@
 namespace App\Tests;
 
 use App\Game2;
+use App\GameFactory;
 use PHPUnit\Framework\TestCase;
 
 class Bowling2Test extends TestCase
@@ -170,9 +171,39 @@ class Bowling2Test extends TestCase
         ];
     }
 
+    /** @test */
+    public function should_get_score_of_gutter_game(): void
+    {
+        $game = $this->createGameFromString('-- -- -- -- -- -- -- -- -- --');
+
+        $this->assertEquals(0, $game->getScore());
+    }
+
+    /** @test */
+    public function should_get_score_of_1(): void
+    {
+        $game = $this->createGameFromString('1- -- -- -- -- -- -- -- -- --');
+
+        $this->assertEquals(1, $game->getScore());
+    }
+
+    /** @test */
+    public function should_get_score_of_20(): void
+    {
+        $game = $this->createGameFromString('11 11 11 11 11 11 11 11 11 11');
+
+        $this->assertEquals(20, $game->getScore());
+    }
 
     protected function setUp(): void
     {
         $this->game = new Game2();
+    }
+
+    protected function createGameFromString(string $gameString): Game2
+    {
+        $gameFactory = new GameFactory();
+
+        return $gameFactory->createFromString($gameString);
     }
 }
